@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<body background ="bkgrnd.jpg";>
+
+
+<head>
+	<title>Cathacks Arcade! </title>
+	<link rel="stylesheet" href="styles2.css">
+
+</head>
+<h1> Cathacks Arcade </h1>
+<ul>
+	<li><a href="#flappysquare">Flappy Square</a></li>
+	<li><a href="#snake">Snake</a></li>
+	<li><a href="#filler">Brick Squad</a></li>
+	<li><a href="#ourgame">Weather</a></li>
+	<li><a href="#ourgame">Email</a></li>
+	<li><a href="#ourgame">Chat Room</a></li>
+	<li><a href="#aboutus">About Us</a></li>
+</ul>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+	position:absolute;
+	top:40%;
+	left:35%;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+    border:1px solid #00000;
+    background-color: #000080;
+}
+</style>
+</head>
+<body onload="startGame()"> 
+<input type="button" value="Restart" onclick="restart()">
+<script>
+
+var paddle;
+var wallleft;
+var walltop;
+var wallright;
+var bricks=[];
+
+function startGame() {
+    myGameArea.start();
+    paddle = new component(50, 10, "white", 200, 250);
+	wallleft=new component(10,500,"black",-5,0);
+	walltop=new component(500,10,"black",0,-5);
+	wallright=new component(10,500,"black",475,0);
+	wallbot=new component(500,10,"black",0,265);
+	ball1=new component(10,10,"red",30,230);
+	ball2=new component(10,10,"red",100,230);
+	ball3=new component(10,10,"red",170,230);
+	ball4=new component(10,10,"red",240,230);
+	ball5=new component(10,10,"red",310,230);
+	ball6=new component(10,10,"red",380,230);
+	
+	brick1=new component(60,20,"red",30,30);
+	brick2=new component(60,20,"red",100,30);
+	brick3=new component(60,20,"red",170,30);
+	brick4=new component(60,20,"red",240,30);
+	brick5=new component(60,20,"red",310,30);
+	brick6=new component(60,20,"red",380,30);
+	
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 480;
+        this.canvas.height = 270;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+		this.interval=setInterval(updateGameArea,10);
+		window.addEventListener('keydown', function (e) {
+            myGameArea.keys = (myGameArea.keys || []);
+            myGameArea.keys[e.keyCode] = (e.type == "keydown");
+        })
+        window.addEventListener('keyup', function (e) {
+            myGameArea.keys[e.keyCode] = (e.type == "keydown");            
+        })
+	},clear:function(){
+	this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
+	},
+	stop: function(){
+	clearInterval(this.interval);
+	}
+}
+function component(width, height, color, x, y) {
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;   
+	this.x = x;
+    this.y = y;   
+    this.update=function(){
+	ctx = myGameArea.context;
+    ctx.fillStyle = color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+	}
+	this.newPos = function() {
+    this.x += this.speedX;
+    this.y += this.speedY;        
+    }
+	this.collideWith=function(object){
+	var left=this.x;
+	var right=this.x+(this.width);
+	var top=this.y;
+	var bottom=this.y+(this.height);
+	var leftObs=object.x;
+	var rightObs= object.x+object.width;
+	var topObs = object.y;
+	var bottomObs=object.y+object.height;
+	var collide=true;
+	if ((bottom<topObs)||(top>bottomObs)||(right<leftObs)||(left>rightObs)){
+	collide=false;
+	}
+	return collide;
+	}
+	
+}
+function updateGameArea()
+{ 
+myGameArea.clear();
+
+if (myGameArea.keys && myGameArea.keys[37]) {
+	moveleft(); }
+if (myGameArea.keys && myGameArea.keys[39]) {
+	moveright(); }
+	paddle.newPos()
+	walltop.update();
+	wallright.update();
+	wallleft.update();
+	wallbot.update();
+	paddle.update();
+	ballmoveUp();
+	//ball1.update();
+	//ball2.update();
+	//ball3.update();
+	//ball4.update();
+	ball5.update();
+	//ball6.update();
+	if(ball5.collideWith(brick1)){
+	ballmoveDown();}
+	else{
+	brick1.update();}
+	if(ball5.collideWith(brick2)){
+	//ball2.speedY=-3;
+	ballmoveDown();}
+	else{
+	brick2.update();
+	}
+	if(ball5.collideWith(brick3)){
+	ballmoveDown();
+	}
+	else{
+	brick3.update();}
+	if(ball5.collideWith(brick4)){
+	ballmoveDown();
+	}
+	else{
+	brick4.update();}
+	if(ball5.collideWith(brick5)){
+	ballmoveDown();
+	}
+	else{
+	brick5.update();
+	}
+	if(ball5.collideWith(brick6)){
+	ballmoveDown();
+	}
+	else{
+	brick6.update();}
+	
+}
+function ballmoveRight(){
+ball5.x+=10}
+function ballmoveleft(){
+ball5.x-=80;
+}
+function moveleft(){
+	paddle.speedX=0;
+	if(paddle.x>5){
+    paddle.speedX+= -1; 
+	}
+}
+
+function moveright() {
+	paddle.speedX=0;
+	if(paddle.x<425){
+    paddle.speedX += 1; 
+	}
+}
+function ballmoveUp(){
+//ball1.y-=1;
+//ball2.y-=1;
+//ball3.y-=1;
+//ball4.y-=1;
+ball5.y-=1;
+//ball6.y-=1;
+}
+function ballmoveDown(){
+//ball1.y+=1;
+//ball2.y+=1;
+//ball3.y+=1;
+//ball4.y+=1;
+ball5.y+=100;
+Math.random()
+//ball6.y+=1;
+}
+function restart(){
+window.location.reload();}
+</script>
+
+</body>
+<input type="button" value="Restart" onclick="restart()"
+</html>

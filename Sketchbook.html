@@ -1,0 +1,29 @@
+<html>
+<div id="canvasDiv"></div>
+<script>
+var canvasDiv=document.getElementById<'Canvas'>;
+canvas=document.createElement('Canvas');
+canvas.setAttribute('width',canvasWidth);
+canvas.setAttribute('height',canvasHeight);
+canvas.setAttribute('id','canvas');
+canvasDiv.appendChild(canvas);
+if(typeof G_vmlCanvasManager !='undefined'){
+}
+context=canvas.getContext("2d");
+
+$('#canvas').mousedown(function (e){
+	var mouseX=e.pageX-this.offsetLeft;
+	var mouseY=e.pageY-this.offestRight;
+	
+	paint=true;
+	addClick(e.pageX-this.offestLeft,e.pageY-this.offsetTop);
+	redraw();
+	
+	$('#canvas').mousemove(function(e){
+	if(paint){
+	addClick(e.pageX-this.offsetLeft,e.pageY-this.offsetTop,true);
+	redraw();
+	}
+});
+</script>
+</html>
